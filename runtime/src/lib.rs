@@ -42,9 +42,7 @@ use pallet_transaction_payment::CurrencyAdapter;
 #[cfg(any(feature = "std", test))]
 pub use sp_runtime::BuildStorage;
 pub use sp_runtime::{Perbill, Permill};
-
-/// Import the template pallet.
-pub use pallet_template;
+pub use frame_support::traits::EqualPrivilegeOnly;
 
 /// An index to a block.
 pub type BlockNumber = u32;
@@ -93,15 +91,15 @@ pub mod opaque {
 //   https://docs.substrate.io/v3/runtime/upgrades#runtime-versioning
 #[sp_version::runtime_version]
 pub const VERSION: RuntimeVersion = RuntimeVersion {
-	spec_name: create_runtime_str!("node-template"),
-	impl_name: create_runtime_str!("node-template"),
+	spec_name: create_runtime_str!("smly2"),
+	impl_name: create_runtime_str!("smly2"),
 	authoring_version: 1,
 	// The version of the runtime specification. A full node will not attempt to use its native
 	//   runtime in substitute for the on-chain Wasm runtime unless all of `spec_name`,
 	//   `spec_version`, and `authoring_version` are the same between Wasm and native.
 	// This value is set to 100 to notify Polkadot-JS App (https://polkadot.js.org/apps) to use
 	//   the compatible custom types.
-	spec_version: 100,
+	spec_version: 101,
 	impl_version: 1,
 	apis: RUNTIME_API_VERSIONS,
 	transaction_version: 1,
@@ -142,6 +140,8 @@ parameter_types! {
 	pub BlockLength: frame_system::limits::BlockLength = frame_system::limits::BlockLength
 		::max_with_normal_ratio(5 * 1024 * 1024, NORMAL_DISPATCH_RATIO);
 	pub const SS58Prefix: u8 = 42;
+    pub MaximumSchedulerWeight: Weight = 10_000_000;
+    pub const MaxScheduledPerBlock: u32 = 50;
 }
 
 // Configure FRAME pallets to include in runtime.
@@ -261,9 +261,18 @@ impl pallet_sudo::Config for Runtime {
 	type Call = Call;
 }
 
-/// Configure the pallet-template in pallets/template.
-impl pallet_template::Config for Runtime {
-	type Event = Event;
+impl pallet_scheduler::Config for Runtime {
+ type Event = Event;
+ type Origin = Origin;
+ type PalletsOrigin = OriginCaller;
+ type Call = Call;
+ type MaximumWeight = MaximumSchedulerWeight;
+ type ScheduleOrigin = frame_system::EnsureRoot<AccountId>;
+ type MaxScheduledPerBlock = MaxScheduledPerBlock;
+ type WeightInfo = ();
+ type OriginPrivilegeCmp = EqualPrivilegeOnly;
+ type PreimageProvider = ();
+ type NoPreimagePostponement = ();
 }
 
 // Create the runtime by composing the FRAME pallets that were previously configured.
@@ -281,8 +290,7 @@ construct_runtime!(
 		Balances: pallet_balances,
 		TransactionPayment: pallet_transaction_payment,
 		Sudo: pallet_sudo,
-		// Include the custom logic from the pallet-template in the runtime.
-		TemplateModule: pallet_template,
+        Scheduler: pallet_scheduler,
 	}
 );
 
@@ -327,7 +335,6 @@ mod benches {
 		[frame_system, SystemBench::<Runtime>]
 		[pallet_balances, Balances]
 		[pallet_timestamp, Timestamp]
-		[pallet_template, TemplateModule]
 	);
 }
 

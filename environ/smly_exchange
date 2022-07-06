@@ -1,17 +1,17 @@
 #/bin/bash
-#
-# Algorithm:
-# 1 Extract an op_return 
-# 2 decrypt op_return
-# 3 send same amount as in tx on the smly2 chain to the decrypted address
-#
 
-logfile=/home/bjarki/exchange.log
-txidfile=/home/bjarki/txids.log
-bin=/home/bjarki/bin
-datadir=/home/bjarki/.smileycoin
+# 1 receive transaction to our vendor address
+# 2 extract a smly2.0 address from an op_return 
+# 3 look at how much money was sent with the op_return
+# 4 transfer amount found in step 3 from master account to the address in step 2
+# 5 burn smly sent
+# if anything goes wrong we send the smiley we received back
 
-PATH=$PATH:$bin
+logfile="~/exchange.log"
+txidfile="~/txids.log"
+datadir="~/.smileycoin"
+ws_dest="ws://127.0.0.1:9945"
+master_seed="system also name sample repair legend december pupil merit destroy kidney elephant///mamma"
 
 program_name="$0"
 txid="$1"
@@ -33,14 +33,14 @@ burn_address="BPZgtUcQaRYUCFGJYoY4c2dd6q9WWyGku2"
 log "`date`"
 log "the incoming txid is $txid"
 
-repeat=`grep $txid $txidfile`
+repeat=`grep "$txid" "$txidfile"`
 if [ "$repeat" ]
 then
     exit 1
 fi
 
 # Step 0: Omit the coinbase transactions (dividends etc)
-generated=`smileycoin-cli gettransaction $txid | grep generated | wc -l`
+generated=`smileycoin-cli gettransaction "$txid" | grep generated | wc -l`
 if [ "$generated" != "0" ]
 then
 	failure "transaction $txid is a coinbase transaction"
@@ -48,7 +48,7 @@ fi
 
 # Step 1: extract some basics for the incoming transaction (the amount and encrypted address)
 log "continuing with txid $txid"
-tx=`smileycoin-cli getrawtransaction $txid`
+tx=`smileycoin-cli getrawtransaction "$txid"`
 
 log "continuing with raw transaction >$tx<"
 
@@ -57,7 +57,7 @@ then
 	log "could not look up txid $txid"
     log "sleeping for 120 seconds"
 	sleep 120
-	tx=`smileycoin-cli getrawtransaction $txid`
+	tx=`smileycoin-cli getrawtransaction "$txid"`
 
 	if [ -z "$tx" ]
 	then
@@ -66,12 +66,12 @@ then
 fi
 
 log "checking whether $txid contains a some coins or not"
-decodedtx=`smileycoin-cli decoderawtransaction $tx`
+decodedtx=`smileycoin-cli decoderawtransaction "$tx"`
 
 sender_txid=`echo -e "$decodedtx" | grep txid | head -2 | tail -1 | sed -e 's/",//' -e 's/.*"//'` 
-sender_tx=`smileycoin-cli getrawtransaction $sender_txid`
+sender_tx=`smileycoin-cli getrawtransaction "$sender_txid"`
 sender_vout=`echo -e "$decodedtx" | grep vout | head -1 | sed -e 's/",//' -e 's/.*"//' -e 's/[ :,]*//g'`
-recipient=`smileycoin-cli decoderawtransaction $sender_tx \
+recipient=`smileycoin-cli decoderawtransaction "$sender_tx" \
             | sed -n -e '/ *"n" *: *'"$sender_vout/,/]/p" \
             | sed -e 1d | sed '/]/,$d     ' | tail -1 | sed 's/[ ",]*//g'`
 
@@ -107,9 +107,7 @@ then
 	failure "was not able to find SMLY2.0 address to send to, sending money back minus tx fees"
 fi
 
-master_seed="system also name sample repair legend december pupil merit destroy kidney elephant///mamma"
-
-send_result=`polkadot-js-api --ws ws://127.0.0.1:9945 tx.balances.transfer $address $final_amount --seed "$master_seed"`
+send_result=`polkadot-js-api --ws "$ws_dest" tx.balances.transfer "$address" "$final_amount" --seed "$master_seed"`
 failed=`echo "$send_result" | grep ExtrinsicFailed`
 
 log "$send_result"

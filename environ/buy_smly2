@@ -1,6 +1,6 @@
 #!/bin/bash
 
-me=`basename $0`
+me=`basename "$0"`
 
 if [ $# != 2 ]
 then
@@ -9,7 +9,7 @@ then
 fi
 
 smly2_address="$1"
-amount=`echo $2 | bc`
+amount=`echo "$2" | bc`
 
 my_address=`smileycoin-cli getnewaddress`
 seller_address="BPZgtUcQaRYUCFGJYoY4c2dd6q9WWyGku2"

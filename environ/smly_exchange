@@ -7,14 +7,11 @@
 # 5 burn smly sent
 # if anything goes wrong we send the smiley we received back
 
-logfile="~/exchange.log"
-txidfile="~/txids.log"
-datadir="~/.smileycoin"
+logfile="/home/bjarki/exchange.log"
+txidfile="/home/bjarki/txids.log"
+datadir="/home/bjarki/.smileycoin"
 ws_dest="ws://127.0.0.1:9945"
 master_seed="system also name sample repair legend december pupil merit destroy kidney elephant///mamma"
-
-program_name="$0"
-txid="$1"
 
 log() {
     echo "$$ $program_name $1" >> $logfile
@@ -25,6 +22,16 @@ failure() {
     log "ERROR $1"
     exit 1
 }
+
+if [ $# != 1 ]
+then
+    failure "we need txid as an argument"
+fi
+
+
+program_name="$0"
+txid="$1"
+
 
 ourtxid="0eb808bba1522c60d5741cbb6a10398e0cdff23835f89f608555ff2e788db755"
 our_address="BPZgtUcQaRYUCFGJYoY4c2dd6q9WWyGku2"
@@ -95,11 +102,16 @@ fi
 log "trying to find magic number fa32 and SMLY2.0 address embedded in the transaction"
 hexaddress=`echo $decodedtx | perl -pe 's|.*fa32(35.*?)".*|\1|'`
 address=`echo "$hexaddress" | xxd -r -p`
-log $address
+log "address $address"
 
 amount_back=`echo "$sent_amount - 1" | bc`
 log "amount to send back in case of failure: $sent_amount"
-final_amount=`printf "%.0f * 1000000000000\n" "$sent_amount" | bc`
+scaled_amount=`echo "$sent_amount * 1000000000000" | bc`
+final_amount=`LC_NUMERIC="en_US.UTF-8" printf "%.0f" "$scaled_amount"`
+
+log "sent $sent_amount"
+log "scaled $scaled_amount"
+log "final $final_amount"
 
 if [ -z "$address" ]
 then

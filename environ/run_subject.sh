@@ -1,4 +1,4 @@
-target/release/node-template --base-path ~/blockchain \
+target/release/smly2 --base-path ~/blockchain \
 --chain environ/customSpecRaw.json --port 30334 --ws-port 9946 --rpc-port 9934 --telemetry-url \
 "wss://telemetry.polkadot.io/submit/ 0" --validator --name "`hostname`" --password mamma \
 --rpc-cors=all --unsafe-ws-external --unsafe-rpc-external \

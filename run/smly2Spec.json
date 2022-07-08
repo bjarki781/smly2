@@ -2,7 +2,7 @@
   "name": "smly2",
   "id": "testnet",
   "chainType": "Local",
-  "bootNodes": ["/ip4/130.208.71.25/tcp/30333/p2p/12D3KooWNZwWd1osghJYNoWttHKhXb7iRYBEsksPPwKJ7EMXZ9NQ"],
+  "bootNodes": [],
   "telemetryEndpoints": null,
   "protocolId": null,
   "properties": null,

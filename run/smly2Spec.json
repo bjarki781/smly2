@@ -1,7 +1,7 @@
 {
   "name": "smly2",
-  "id": "testnet",
-  "chainType": "Local",
+  "id": "smly2",
+  "chainType": "Live",
   "bootNodes": [],
   "telemetryEndpoints": null,
   "protocolId": null,

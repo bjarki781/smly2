@@ -1,9 +1,9 @@
 [package]
 name = "smly2-runtime"
-version = "4.0.0-dev"
-description = "A fresh FRAME-based Substrate runtime, ready for hacking."
-authors = ["Substrate DevHub <https://github.com/substrate-developer-hub>"]
-homepage = "https://substrate.io/"
+version = "0.0.1"
+description = "Substrate runtime for smly2"
+authors = ["Substrate DevHub <https://github.com/substrate-developer-hub>", "Bjarki Gunnarsson <https://github.com/bjarki781>"]
+homepage = "https://smileyco.in/"
 edition = "2021"
 license = "Unlicense"
 publish = false

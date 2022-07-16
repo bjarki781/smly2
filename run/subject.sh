@@ -2,5 +2,5 @@ target/release/smly2 --base-path ~/blockchain \
 --chain run/smly2SpecRaw.json --port 30334 --ws-port 9946 --rpc-port 9934 --telemetry-url \
 "wss://telemetry.polkadot.io/submit/ 0" --validator --name "`hostname`" --password mamma \
 --rpc-cors=all --unsafe-ws-external --unsafe-rpc-external \
---bootnodes=/ip4/130.208.71.25/tcp/30333/p2p/12D3KooWLWAtBCH1ofFDqf8ACNzoNkYkWcrZ5rpAmtG2j5kAWrNh 
+--bootnodes=/ip4/130.208.71.25/tcp/30333/p2p/12D3KooWNL9pe2f6i4mKQjwYGNUnDpTPK8dQiyv88EGhVwzFyfrV 
 

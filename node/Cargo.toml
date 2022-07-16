@@ -1,9 +1,9 @@
 [package]
 name = "smly2"
-version = "4.0.0-dev"
-description = "A fresh FRAME-based Substrate node, ready for hacking."
-authors = ["Substrate DevHub <https://github.com/substrate-developer-hub>"]
-homepage = "https://substrate.io/"
+version = "0.0.1"
+description = "Sister blockchain to SmileyCoin based on Substrate"
+authors = ["Substrate DevHub <https://github.com/substrate-developer-hub>", "Bjarki Gunnarsson <https://github.com/bjarki781>"]
+homepage = "https://smileyco.in/"
 edition = "2021"
 license = "Unlicense"
 publish = false
@@ -57,7 +57,7 @@ frame-benchmarking = { version = "4.0.0-dev", git = "https://github.com/parityte
 frame-benchmarking-cli = { version = "4.0.0-dev", git = "https://github.com/paritytech/substrate.git", branch = "polkadot-v0.9.24" }
 
 # Local Dependencies
-smly2-runtime = { version = "4.0.0-dev", path = "../runtime" }
+smly2-runtime = { version = "0.0.1", path = "../runtime" }
 
 # CLI-specific dependencies
 try-runtime-cli = { version = "0.10.0-dev", optional = true, git = "https://github.com/paritytech/substrate.git", branch = "polkadot-v0.9.24" }

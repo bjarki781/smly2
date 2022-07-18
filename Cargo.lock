@@ -6352,7 +6352,7 @@ checksum = "f2dd574626839106c320a323308629dcb1acfc96e32a8cba364ddc61ac23ee83"
 
 [[package]]
 name = "smly2"
-version = "4.0.0-dev"
+version = "0.0.1"
 dependencies = [
  "clap",
  "frame-benchmarking",
@@ -6394,7 +6394,7 @@ dependencies = [
 
 [[package]]
 name = "smly2-runtime"
-version = "4.0.0-dev"
+version = "0.0.1"
 dependencies = [
  "frame-benchmarking",
  "frame-executive",

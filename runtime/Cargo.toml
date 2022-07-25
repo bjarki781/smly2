@@ -12,17 +12,11 @@ repository = "https://github.com/bjarki781/smly2.0"
 [package.metadata.docs.rs]
 targets = ["x86_64-unknown-linux-gnu"]
 
-[dependencies.pallet-session]
-default-features = false
-git = 'https://github.com/paritytech/substrate.git'
-branch = 'polkadot-v0.9.22'
-
 [dependencies]
-pallet-validator-set = { package = "substrate-validator-set", version = "0.9.22", default-features = false, git = "https://github.com/gautamdhameja/substrate-validator-set.git" }
-
+pallet-session = { package = "pallet-session", default-features = false, git = "https://github.com/paritytech/substrate.git", branch = "polkadot-v0.9.24" }
+validator-set = { package = "substrate-validator-set",  version = "0.9.24", default-features = false, git = "https://github.com/bjarki781/substrate-validator-set.git" }
 codec = { package = "parity-scale-codec", version = "3.0.0", default-features = false, features = ["derive"] }
 scale-info = { version = "2.1.1", default-features = false, features = ["derive"] }
-
 pallet-aura = { version = "4.0.0-dev", default-features = false, git = "https://github.com/paritytech/substrate.git", branch = "polkadot-v0.9.24" }
 pallet-balances = { version = "4.0.0-dev", default-features = false, git = "https://github.com/paritytech/substrate.git", branch = "polkadot-v0.9.24" }
 pallet-scheduler = { version = "4.0.0-dev", default-features = false, git = "https://github.com/paritytech/substrate.git", branch = "polkadot-v0.9.24" }

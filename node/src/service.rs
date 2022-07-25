@@ -151,8 +151,8 @@ pub fn new_partial(
 
 fn remote_keystore(_url: &String) -> Result<Arc<LocalKeystore>, &'static str> {
 	// FIXME: here would the concrete keystore be built,
-	//        must return a concrete type (NOT `LocalKeystore`) that
-	//        implements `CryptoStore` and `SyncCryptoStore`
+	//		must return a concrete type (NOT `LocalKeystore`) that
+	//		implements `CryptoStore` and `SyncCryptoStore`
 	Err("Remote Keystore not supported.")
 }
 
